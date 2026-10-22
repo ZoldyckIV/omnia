@@ -1,7 +1,6 @@
 /**
  * Simple Engagement Congratulation Page Logic
- * Stores wishes permanently in `wishes.json` on the server disk.
- * Features a hidden Admin Mode to delete comments secretly.
+ * Reads and writes directly to wishes.json via relative endpoint (works in subfolders like /omnia/)
  */
 
 (function () {
@@ -10,6 +9,10 @@
   const STORAGE_KEY = 'omnia_real_wishes';
   const ADMIN_PASSCODE = '1234'; // كلمة المرور السرية للإدارة
   
+  // Relative API endpoint so it works inside any subfolder (e.g. /omnia/)
+  const API_ENDPOINT = 'api.php';
+  const JSON_FILE = 'wishes.json';
+
   const form = document.getElementById('congratsForm');
   const senderNameInput = document.getElementById('senderName');
   const senderMessageInput = document.getElementById('senderMessage');
@@ -20,28 +23,21 @@
   let currentMessages = [];
   let isAdmin = sessionStorage.getItem('omnia_admin_mode') === 'true';
 
-  // Check if URL has ?admin=1234
+  // Check URL for ?admin=1234
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('admin') === ADMIN_PASSCODE || urlParams.get('admin') === 'true') {
     isAdmin = true;
     sessionStorage.setItem('omnia_admin_mode', 'true');
   }
 
-  // Fetch messages from server (wishes.json) with fallback to localStorage
+  // Load messages from server (reads wishes.json)
   async function loadMessages() {
+    // 1. Try reading via api.php
     try {
-      const res = await fetch('/api/wishes');
+      const res = await fetch(`${API_ENDPOINT}?t=${Date.now()}`);
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data)) {
-          // If server list is empty but localStorage has items from earlier, sync them to server
-          const localData = getLocalBackup();
-          if (data.length === 0 && localData.length > 0) {
-            for (const item of localData.reverse()) {
-              await saveMessageToServer(item);
-            }
-            return await loadMessages();
-          }
           currentMessages = data;
           saveLocalBackup(data);
           renderMessages();
@@ -49,15 +45,31 @@
         }
       }
     } catch (e) {
-      console.warn('API unavailable, using local backup', e);
+      console.warn('api.php unavailable, trying direct wishes.json', e);
     }
 
-    // Fallback to localStorage if server isn't answering
+    // 2. Try direct wishes.json fetch
+    try {
+      const res = await fetch(`${JSON_FILE}?t=${Date.now()}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          currentMessages = data;
+          saveLocalBackup(data);
+          renderMessages();
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('Direct wishes.json fetch failed', e);
+    }
+
+    // 3. Fallback to localStorage backup
     currentMessages = getLocalBackup();
     renderMessages();
   }
 
-  // Local storage backup helpers
+  // Local storage helpers
   function getLocalBackup() {
     try {
       const d = localStorage.getItem(STORAGE_KEY);
@@ -73,17 +85,17 @@
     } catch (e) {}
   }
 
-  // Save new message to server (wishes.json)
+  // Save new message to wishes.json via api.php
   async function saveMessageToServer(entry) {
     try {
-      const res = await fetch('/api/wishes', {
+      const res = await fetch(API_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(entry)
       });
       if (res.ok) {
         const result = await res.json();
-        if (result.list) {
+        if (result.list && Array.isArray(result.list)) {
           currentMessages = result.list;
           saveLocalBackup(currentMessages);
           renderMessages();
@@ -91,27 +103,27 @@
         }
       }
     } catch (e) {
-      console.warn('Could not save to server', e);
+      console.warn('Could not post to api.php', e);
     }
 
-    // Fallback to local
+    // Local fallback
     currentMessages.unshift(entry);
     saveLocalBackup(currentMessages);
     renderMessages();
     return false;
   }
 
-  // Delete message from server (wishes.json)
+  // Delete message from wishes.json via api.php
   async function deleteMessageFromServer(id) {
     try {
-      const res = await fetch('/api/wishes/delete', {
+      const res = await fetch(API_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: id })
+        body: JSON.stringify({ action: 'delete', id: id })
       });
       if (res.ok) {
         const result = await res.json();
-        if (result.list) {
+        if (result.list && Array.isArray(result.list)) {
           currentMessages = result.list;
           saveLocalBackup(currentMessages);
           renderMessages();
@@ -119,10 +131,10 @@
         }
       }
     } catch (e) {
-      console.warn('Could not delete from server', e);
+      console.warn('Could not delete via api.php', e);
     }
 
-    // Fallback local delete
+    // Local fallback delete
     currentMessages = currentMessages.filter(item => String(item.id) !== String(id));
     saveLocalBackup(currentMessages);
     renderMessages();
@@ -239,10 +251,7 @@
     }, 4000);
   });
 
-  // ==========================================================================
-  // Secret Admin Activation Trigger:
-  // Triple-click on the Wax Seal at the top!
-  // ==========================================================================
+  // Secret Admin Activation Trigger
   let clickCount = 0;
   let clickTimer = null;
 
@@ -309,7 +318,7 @@
     }
   }
 
-  // Initial load from server
+  // Initial load
   loadMessages();
 
 })();

@@ -68,20 +68,36 @@ const server = http.createServer((req, res) => {
 
   const urlPath = req.url.split('?')[0];
 
-  // API Route: GET /api/wishes
-  if (urlPath === '/api/wishes' && req.method === 'GET') {
+  // API Route: GET /api/wishes or /api.php or api.php
+  if ((urlPath === '/api/wishes' || urlPath === '/api.php' || urlPath.endsWith('/api.php')) && req.method === 'GET') {
     const list = readWishes();
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     res.end(JSON.stringify(list));
     return;
   }
 
-  // API Route: POST /api/wishes (Add new wish)
-  if (urlPath === '/api/wishes' && req.method === 'POST') {
+  // API Route: POST /api/wishes or /api.php or api.php
+  if ((urlPath === '/api/wishes' || urlPath === '/api.php' || urlPath.endsWith('/api.php')) && req.method === 'POST') {
     parseJsonBody(req, (err, data) => {
-      if (err || !data.name || !data.message) {
+      if (err) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ success: false, error: 'Invalid data' }));
+        res.end(JSON.stringify({ success: false, error: 'Invalid JSON' }));
+        return;
+      }
+
+      // Handle delete action
+      if (data.action === 'delete' && data.id) {
+        const list = readWishes();
+        const updatedList = list.filter(item => String(item.id) !== String(data.id));
+        writeWishes(updatedList);
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify({ success: true, list: updatedList }));
+        return;
+      }
+
+      if (!data.name || !data.message) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: 'Missing fields' }));
         return;
       }
 

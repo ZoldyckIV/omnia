@@ -1,0 +1,458 @@
+/* ==========================================================================
+   Omnia Engagement Page - Clean & Simple Card Design
+   Dusty Blue & Ivory Wedding Card Palette
+   ========================================================================== */
+
+:root {
+  --color-dusty-dark: #2d455d;     /* Deep slate blue for text & headings */
+  --color-dusty-blue: #547796;     /* Primary dusty blue */
+  --color-dusty-light: #89a7bf;    /* Soft dusty blue */
+  --color-dusty-wash: #f0f4f8;     /* Subtle blue background */
+  
+  --color-parchment: #faf7f2;      /* Off-white parchment background */
+  --color-white: #ffffff;          /* Card surface */
+  --color-gold: #bca06c;           /* Delicate champagne gold */
+  
+  --font-arabic-heading: 'Amiri', serif;
+  --font-arabic-body: 'Alexandria', sans-serif;
+
+  --radius-sm: 8px;
+  --radius-md: 18px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 12px 35px rgba(45, 69, 93, 0.08), 0 1px 3px rgba(45, 69, 93, 0.05);
+}
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-arabic-body);
+  background-color: var(--color-parchment);
+  color: var(--color-dusty-dark);
+  line-height: 1.7;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  padding: 40px 16px;
+}
+
+/* ==========================================================================
+   Floral Background Accents (From Reference Image)
+   ========================================================================== */
+.floral-frame {
+  position: fixed;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.9;
+  mix-blend-mode: multiply;
+}
+
+.floral-top-left {
+  top: -15px;
+  left: -15px;
+  width: 320px;
+  max-width: 40vw;
+}
+
+.floral-bottom-right {
+  bottom: -20px;
+  right: -20px;
+  width: 340px;
+  max-width: 42vw;
+  transform: rotate(180deg);
+}
+
+.floral-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ==========================================================================
+   Main Container & Invitation Card
+   ========================================================================== */
+.page-container {
+  max-width: 680px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.card-outer {
+  background: var(--color-white);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(84, 119, 150, 0.25);
+  box-shadow: var(--shadow-card);
+}
+
+.card-inner {
+  border: 1px solid rgba(84, 119, 150, 0.35);
+  border-radius: calc(var(--radius-md) - 6px);
+  padding: 44px 30px 36px;
+  text-align: center;
+  position: relative;
+  background: linear-gradient(180deg, rgba(250, 247, 242, 0.3) 0%, #ffffff 100%);
+  outline: 1px dashed rgba(188, 160, 108, 0.35);
+  outline-offset: -8px;
+}
+
+/* Wax Seal at the top */
+.wax-seal-wrapper {
+  position: absolute;
+  top: -36px;
+  left: 36px;
+  width: 72px;
+  height: 72px;
+  filter: drop-shadow(0 6px 14px rgba(45, 69, 93, 0.22));
+}
+
+.wax-seal-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  clip-path: circle(48% at 50% 50%);
+  display: block;
+}
+
+/* Header Text */
+.card-header {
+  margin-bottom: 30px;
+}
+
+.bismillah {
+  font-family: var(--font-arabic-heading);
+  font-size: 1.25rem;
+  color: #667e94;
+  margin-bottom: 6px;
+}
+
+.hadith {
+  font-family: var(--font-arabic-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-dusty-dark);
+  margin-bottom: 14px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 220px;
+  margin: 0 auto 18px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--color-dusty-light), transparent);
+}
+
+.divider span {
+  padding: 0 12px;
+  color: var(--color-gold);
+  font-size: 0.85rem;
+}
+
+.main-title {
+  font-family: var(--font-arabic-body);
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--color-dusty-light);
+  letter-spacing: 1.5px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+.bride-name {
+  font-family: 'El Messiri', 'Aref Ruqaa', serif;
+  font-size: 3.8rem;
+  font-weight: 700;
+  color: var(--color-dusty-dark);
+  margin-top: 14px;
+  margin-bottom: 22px;
+  line-height: 1.6;
+  letter-spacing: 1px;
+  display: inline-block;
+  text-shadow: 0 2px 10px rgba(45, 69, 93, 0.12);
+  position: relative;
+  padding: 0 16px;
+}
+
+.bride-name::before,
+.bride-name::after {
+  content: '❧';
+  font-size: 1.3rem;
+  color: var(--color-dusty-light);
+  vertical-align: middle;
+  opacity: 0.6;
+  margin: 0 10px;
+}
+
+.subtitle {
+  font-size: 0.98rem;
+  color: #607990;
+}
+
+/* ==========================================================================
+   Form Styling: Clean and Direct
+   ========================================================================== */
+.congrats-form {
+  text-align: right;
+  background: var(--color-dusty-wash);
+  border: 1px solid rgba(84, 119, 150, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 24px 20px;
+  margin-bottom: 36px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--color-dusty-dark);
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: var(--font-arabic-body);
+  font-size: 0.95rem;
+  color: var(--color-dusty-dark);
+  background: #ffffff;
+  border: 1.5px solid rgba(84, 119, 150, 0.25);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 95px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--color-dusty-blue);
+  box-shadow: 0 0 0 3px rgba(84, 119, 150, 0.15);
+}
+
+.submit-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 20px;
+  background: linear-gradient(135deg, var(--color-dusty-blue) 0%, var(--color-dusty-dark) 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-arabic-body);
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(45, 69, 93, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(45, 69, 93, 0.32);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   Messages Section (Only Real Stored Messages)
+   ========================================================================== */
+.messages-section {
+  text-align: right;
+  margin-top: 20px;
+}
+
+.section-title-wrap {
+  border-bottom: 1px solid rgba(84, 119, 150, 0.2);
+  padding-bottom: 12px;
+  margin-bottom: 18px;
+}
+
+.messages-title {
+  font-family: var(--font-arabic-heading);
+  font-size: 1.45rem;
+  color: var(--color-dusty-dark);
+}
+
+.messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Individual Message Card */
+.message-card {
+  background: #ffffff;
+  border: 1px solid rgba(84, 119, 150, 0.2);
+  border-right: 4px solid var(--color-dusty-blue);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  box-shadow: 0 2px 8px rgba(45, 69, 93, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.message-card:hover {
+  transform: translateY(-2px);
+}
+
+.message-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.sender-info {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.sender-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-dusty-dark);
+}
+
+.message-time {
+  font-size: 0.78rem;
+  color: #7b94a8;
+  direction: ltr;
+}
+
+/* Admin Delete Button (Only rendered when Admin mode is active) */
+.delete-msg-btn {
+  background: #fff5f5;
+  border: 1px solid #ffd4d4;
+  color: #c53030;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-arabic-body);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delete-msg-btn:hover {
+  background: #c53030;
+  color: #ffffff;
+  border-color: #c53030;
+}
+
+/* Admin Banner */
+.admin-badge-banner {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 9999;
+  background: rgba(45, 69, 93, 0.95);
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+.exit-admin-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #ffffff;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-arabic-body);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.exit-admin-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.message-body {
+  font-family: var(--font-arabic-heading);
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #334d65;
+  white-space: pre-line;
+}
+
+/* Empty State (When no messages have been submitted yet) */
+.empty-msg {
+  text-align: center;
+  padding: 30px 10px;
+  color: #7b94a8;
+  font-size: 0.95rem;
+  background: #ffffff;
+  border: 1px dashed rgba(84, 119, 150, 0.25);
+  border-radius: var(--radius-sm);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  body {
+    padding: 20px 10px;
+  }
+
+  .card-inner {
+    padding: 36px 16px 24px;
+  }
+
+  .bride-name {
+    font-size: 2.8rem;
+    margin-top: 10px;
+    margin-bottom: 16px;
+  }
+
+  .bride-name::before,
+  .bride-name::after {
+    font-size: 1rem;
+    margin: 0 5px;
+  }
+
+  .hadith {
+    font-size: 1.15rem;
+  }
+
+  .floral-top-left {
+    width: 180px;
+    top: -20px;
+    left: -20px;
+  }
+
+  .floral-bottom-right {
+    width: 200px;
+    bottom: -20px;
+    right: -20px;
+  }
+}
