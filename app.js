@@ -149,7 +149,7 @@
     if (currentMessages.length === 0) {
       messagesList.innerHTML = `
         <div class="empty-msg">
-          لا توجد تهاني مسجلة بعد، كُن أول من يكتب تهنئة للعروس 🤍
+          لا توجد تهاني مسجلة بعد، كُن أول من يكتب تهنئة للعروسة 🤍
         </div>
       `;
       return;
